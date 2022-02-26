@@ -1,0 +1,19 @@
+Create a helm chart at /root/webapp-nginx for this application by converting the deployment and service definitions into templates.
+
+
+
+Create a chart first and then move the files into the template directory.
+
+The deployment and service objects should be named in the format RELEASE-NAME-nginx.
+
+Set apiVersion for the chart to v2.
+
+Name the chart webapp-nginx.
+
+Set version number to 0.1.1.
+
+Set appVersion to 1.16.0.
+
+Values file to have a variable image set by default to nginx:1.16.0.
+
+Value of image variable to be used in deployment as the image name for the container
