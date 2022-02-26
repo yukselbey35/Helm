@@ -1,0 +1,69 @@
+#WRITING HELM CHARTS
+#Helm chart just like application installation wizard.
+#Helm chart install all the kubernetes objects in order
+
+#For example we can write a helm chart whenever 
+#we do upgrade database will backup before the update happens
+
+#When we creating a helm chart first create the directory structure with command
+$helm create nginx-chart 
+#this create the skelaton of a helm chart
+
+#to see it
+$ ls nginx-chart
+
+#EXAMPLE
+PS C:\Helm\nginx-chart> cd .\nginx-chart\
+PS C:\Helm\nginx-chart\nginx-chart> ls
+Directory:
+ C:\Helm\nginx-chart\nginx-chart
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----         2/25/2022   2:26 PM                charts
+d-----         2/25/2022   2:26 PM                templates
+-a----         2/25/2022   2:26 PM            349 .helmignore
+-a----         2/25/2022   2:26 PM           1147 Chart.yaml
+-a----         2/25/2022   2:26 PM           1878 values.yaml
+
+#After the created helm chart We can modify it 
+
+#Edit Chart.yaml to add info like name and email
+
+#Clean or Remove everything from templates directory to add our yaml files
+#Add own deployment, services, etc yaml file
+$helm install hello-world-1 ./nginx-chart
+
+#we can see it
+$kubectl get deploy
+
+#But when we try to update we will have issue 
+#So that WE HAVE TO Templatize
+#For example Deployment name
+{{ .Release.Name }}-nginx
+
+#Use command 
+$helm install hello-world-1 ./nginx-chart
+
+#when we run the command deployment name will be hello-world-1
+#Many Release
+.Release.Name
+.Release.Namespace
+.Release.Service
+.Release.IsUpgrade
+
+#OR We can use Chart.yaml file to refer any values from Chart.yaml file
+Chart.Name
+Chart.Type
+
+Capabilities.Kubeversion
+
+Values.image
+
+etc.
+
+#When we templatize then run the command
+$helm install hello-world-1 --set replicaCount=2 --set image=nginx ./nginx-chart
+
+#Or use values.yaml
+
+

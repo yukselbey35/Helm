@@ -1,0 +1,23 @@
+#Use command 
+#helm install hello-world-1 ./nginx-chart
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-nginx
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: {{ .Values.image.repository }} : {{ .Values.image.tag}}
+        ports:
+        - containerPort: 80

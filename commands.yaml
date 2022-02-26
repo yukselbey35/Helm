@@ -1,0 +1,148 @@
+#From Script
+$ curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+$ chmod 700 get_helm.sh
+$ ./get_helm.sh
+
+#When we install Helm 2 also install Tiller into Kubernetes cluster
+#Helm3 things are improved.RBAC improved to control users actions
+
+#Helm has snopshot feature 
+#we can install Wordpress upgrade it and return the old revision
+#Helm3 has better way strategic merge path with rollback
+$helm install Wordpress
+$helm upgrade Wordpress
+$helm rollback Wordpress
+
+#Helm saves previous revisons in the cluster as sectet.(what installed  etc)
+#Charts are collection of data(Deployment, secrets, ingress, service)
+
+#Helm Charts has templating means uses {{}} so we can change those values
+#We can save those values  in a values.yaml file so we can modify customy the application.
+#values.yaml file like input file.
+
+#When a  chart applied to our cluster a release is created.
+$helm install [release name] / [chart-name]
+$helm install my-wordpress-site-production bitnami/wordpress
+$helm install my-wordpress-site-developers bitnami/wordpress
+#This help us use different wordpress app or site and we can track them with revison
+#Every Helm chart.yaml file values.yaml, chart.yaml, deployment.yaml, service.yaml etc.
+
+Helm Chart apiVersion: v1 means Helm 2
+Helm Chart apiVersion: v2 means Helm 3
+
+#Helmchart has templates directory(Deployment, Service, Secrets etc), values.yaml, chart.yaml, Licence etc
+#To use HELP in Helm
+$helm get --help
+$helm repo --help
+$helm repo update --help
+
+#When we deploy wordpress app we can use ArtifactHub, search and use it
+$helm search wordpress hub
+$helm search wordpress repo
+
+#We can deploy the app
+#First add the local repo
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
+#Second We deploy the app to our cluster using the helm chart
+$ helm install my-release bitnami/wordpress
+
+#When the chart is deployed it is deployed as release.
+#TO SEE ALL EXISTING RELEASES USE COMMAND
+$helm list
+$my-wordpress-release
+
+#When we want to delete the release 
+$helm uninstall my-wordpress-release
+
+helm repo list
+helm repo update
+helm repo add
+
+#Using Custom Parameters in Command Line: Override these values in the values.yaml file
+$helm install --set my-wordpressBlogName=weazcloud my-wordpress-site-developers-release bitnami/wordpress
+              --set wordpressEmail=weaz@gweazcloud.com
+
+#We can create custom-values.yaml file
+$helm install --values custom-values.yaml my-wordpress-site-developers-release bitnami/wordpress
+#Or pull and modify it
+$helm pull bitnami/wordpress
+$helm pull --untar=true bitnami/wordpress
+
+#we can see all the files
+ls wordpress
+#We can install or release our edited helm chart 
+$helm install my-wordpress-release ./wordpress
+
+$helm search hub concul | grep -i hashicorp  
+
+#Add bitnami helm chart repository in the controlplane node.
+$helm repo add bitnami https://charts.bitnami.com/bitnami 
+
+#command is used to search for the wordpress package from the newly added bitnami repository
+$helm search repo wordpress
+
+
+#How many helm chart repositories are there in the controlplane node now
+$helm repo list 
+
+#Deploy the Apache application on the cluster using the apache from the bitnami repository.
+
+
+#Deploy the Apache application on the cluster using the apache from the bitnami repository.
+#Set the release Name to: amaze-surf
+$helm install amaze-surf bitnami/apache
+
+#How many releases of nginx charts can you see installed in the cluster now?
+#Run the command and check the number of installed nginx charts
+$helm list 
+
+#Uninstall the nginx chart release happy-browse from the cluster
+$helm uninstall happy-browse
+$helm uninstall my-nginx 
+
+#Remove the Hashicorp helm repository from the cluster.
+$helm repo remove hashicorp
+
+#HELM UPGRADE
+#Installed old version
+$helm install nginx-release bitnami/nginx --version 7.1.0
+#UPGRADE
+$helm upgrade nginx-release bitnami/nginx
+
+#we can see helm
+$helm list
+#We can see the HELM HISTORY 
+$helm history nginx-release
+
+#Helm LIFE CYCLE MANAGMENT ROLLBACK
+# 1 means revision 1
+$helm rollback nginx-release 1 
+#When we using rollback Helm needs password, username
+
+#Add bitnami helm chart repository to the cluster.
+$helm repo add bitnami https://charts.bitnami.com/bitnami
+
+#How many releases of nginx can you see in the cluster now?
+$helm list
+#Then use name of helm with history command
+$helm history dazzling-web
+
+#The Devops team has decided to upgrade the nginx to version 1.21 in the bitnami repository.
+$helm upgrade dazzling-web bitnami/nginx --version 9.0.0 
+
+#Oops!.. There seems to be a minor issue in the website and the Devops Team is asked to rollback the nginx to previous version!
+$helm rollback dazzling-web 3
+
+#AFTER FINISH THE HELM CHART
+#we can check with Lint, Template and Dry Run
+#LINT run the command to validate the chart and to see line by line the error.
+$helm lint ./nginx-chart
+
+#TEMPLATE this command show the template and validate display the output and errors
+$helm template ./nginx-chart
+#to see error lines
+$helm template ./nginx-chart --debug 
+
+#DRY_RUN command show us the kubernetes syntax errors
+$helm install hello-world-1 ./nginx-chart --dry-run
+
